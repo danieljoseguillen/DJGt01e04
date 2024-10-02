@@ -22,7 +22,7 @@ public class DJGt01e04 {
         String val;
         System.out.println("\nBienvenido al hotel " + ho.getNombre());
         do {
-            val="";
+            val = "";
             System.out.println("\nQué operación desea realizar?"
                     + "\n1 - Consultar habitaciones vacías."
                     + "\n2 - Consultar habitaciones ocupadas"
@@ -33,7 +33,7 @@ public class DJGt01e04 {
                 num = Integer.parseInt(scan.nextLine());
                 switch (num) {
                     case 0 -> {
-                         System.out.println("Hasta pronto!");
+                        System.out.println("Hasta pronto!");
                     }
                     case 1 -> {
                         ho.listhablibres();
@@ -43,13 +43,21 @@ public class DJGt01e04 {
                     }
                     case 3 -> {
                         System.out.println("Ingrese el tipo de suite:\nLowCost\nDoble\nSuite");
-                        val=scan.nextLine();
-                        ho.realizarReserva(val);
+                        val = scan.nextLine();
+                    try {
+                        System.out.println("Ha reservado la habitación " + ho.realizarReserva(val));
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     }
                     case 4 -> {
                         System.out.println("Ingrese el numero de habitación.");
-                        val=scan.nextLine();
-                        ho.AnularReserva(val);
+                        val = scan.nextLine();
+                        try {
+                            System.out.println("Checkout realizado, debe pagar un importe de " + ho.AnularReserva(val) + " Euros.");
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
                     default -> {
                         System.out.println("Digito erroneo.");

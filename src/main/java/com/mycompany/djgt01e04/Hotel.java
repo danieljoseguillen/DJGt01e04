@@ -74,52 +74,40 @@ public class Hotel {
                 + "\nDobles: " + db + "\nSuite: " + su);
     }
 
-    public void realizarReserva(String val) {
+    public String realizarReserva(String val) throws Exception {
         String nom = "";
         if (!val.equalsIgnoreCase("suite") && !val.equalsIgnoreCase("doble") && !val.equalsIgnoreCase("lowcost")) {
-            System.out.println("No existe una habitación de ese tipo.");
+            throw new RuntimeException("No existe una habitación de ese tipo.");
         } else {
             for (int i = 0; i < habitaciones.size(); i++) {
-                if (val.equalsIgnoreCase("suite") && habitaciones.get(i) instanceof suite) {
-                    habitaciones.get(i).checkin();
-                    nom = habitaciones.get(i).getNumero();
-                    i = habitaciones.size() + 10;
-                } else if (val.equalsIgnoreCase("doble") && habitaciones.get(i) instanceof doble) {
-                    habitaciones.get(i).checkin();
-                    nom = habitaciones.get(i).getNumero();
-                    i = habitaciones.size() + 10;
-                } else if (val.equalsIgnoreCase("lowcost") && habitaciones.get(i) instanceof lowCost) {
-                    habitaciones.get(i).checkin();
-                    nom = habitaciones.get(i).getNumero();
-                    i = habitaciones.size() + 10;
+                if (habitaciones.get(i).isEstado() == false) {
+                    if (val.equalsIgnoreCase("suite") && habitaciones.get(i) instanceof suite) {
+                        habitaciones.get(i).checkin();
+                        return habitaciones.get(i).getNumero();
+                    } else if (val.equalsIgnoreCase("doble") && habitaciones.get(i) instanceof doble) {
+                        habitaciones.get(i).checkin();
+                        return habitaciones.get(i).getNumero();
+                    } else if (val.equalsIgnoreCase("lowcost") && habitaciones.get(i) instanceof lowCost) {
+                        habitaciones.get(i).checkin();
+                        return habitaciones.get(i).getNumero();
+                    }
                 }
             }
-            if (!nom.isEmpty()) {
-                System.out.println("Ha reservado la habitación " + nom);
-            } else {
-                System.out.println("No se encontró una habitación de ese tipo desocupada.");
-            }
+            throw new RuntimeException("No se encontró una habitación de ese tipo desocupada.");
         }
     }
 
-    public void AnularReserva(String val) {
+    public double AnularReserva(String val) throws Exception {
         boolean check = false;
         for (Habitacion h : habitaciones) {
             if (h.getNumero().equalsIgnoreCase(val)) {
                 if (h.isEstado() == true) {
-                    System.out.println("Checkout realizado, debe pagar un importe de " + h.checkout() + " Euros.");
-                    check = true;
-                }else{
-                System.out.println("La habitación no está ocupada.");
-                check = true;
-                break; /**Se que no es buena practica pero si esto sigue aquí 
-                 * es que no se me ocurrió algo mejor.
-                 */
+                    return h.checkout();
+                } else {
+                    throw new RuntimeException("La habitación no está ocupada.");
                 }
             }
         }
-        if (check == false) {
-            System.out.println("No se encontró la habitación.");
-        }
+        throw new RuntimeException("No se encontró la habitación.");
     }
 }
